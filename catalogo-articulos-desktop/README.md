@@ -56,6 +56,8 @@ La aplicación debe manejar:
 
 ## Script de Generación de Base de Datos
 
+### SQL Server
+
 ```sql
 USE master
 GO
@@ -177,28 +179,109 @@ INSERT INTO ARTICULOS VALUES
 GO
 ```
 
+### SQLite
+
+```sql
+-- Tabla MARCAS
+CREATE TABLE IF NOT EXISTS MARCAS (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Descripcion TEXT
+);
+
+-- Tabla CATEGORIAS
+CREATE TABLE IF NOT EXISTS CATEGORIAS (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Descripcion TEXT
+);
+
+-- Tabla ARTICULOS
+CREATE TABLE IF NOT EXISTS ARTICULOS (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Codigo TEXT,
+    Nombre TEXT,
+    Descripcion TEXT,
+    IdMarca INTEGER,
+    IdCategoria INTEGER,
+    ImagenUrl TEXT,
+    Precio REAL,
+    FOREIGN KEY (IdMarca) REFERENCES MARCAS(Id),
+    FOREIGN KEY (IdCategoria) REFERENCES CATEGORIAS(Id)
+);
+
+-- Datos iniciales: MARCAS
+INSERT INTO MARCAS (Descripcion) VALUES 
+    ('Samsung'), 
+    ('Apple'), 
+    ('Sony'), 
+    ('Huawei'), 
+    ('Motorola');
+
+-- Datos iniciales: CATEGORIAS
+INSERT INTO CATEGORIAS (Descripcion) VALUES 
+    ('Celulares'),
+    ('Televisores'), 
+    ('Media'), 
+    ('Audio');
+
+-- Datos iniciales: ARTICULOS
+INSERT INTO ARTICULOS (Codigo, Nombre, Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio) VALUES 
+    ('S01', 'Galaxy S10', 'Una canoa cara', 1, 1, 
+     'https://images.samsung.com/is/image/samsung/assets/ar/p6_gro2/p6_initial_mktpd/smartphones/galaxy-s10/specs/galaxy-s10-plus_specs_design_colors_prism_black.jpg?$163_346_PNG$', 
+     69.999),
+    ('M03', 'Moto G Play 7ma Gen', 'Ya siete de estos?', 5, 1, 
+     'https://www.motorola.cl/arquivos/moto-g7-play-img-product.png?v=636862863804700000', 
+     15699),
+    ('S99', 'Play 4', 'Ya no se cuantas versiones hay', 3, 3, 
+     'sin_imagen_para_que_de_error....muejeje', 
+     35000),
+    ('S56', 'Bravia 55', 'Alta tele', 3, 2, 
+     'https://intercompras.com/product_thumb_keepratio_2.php?img=images/product/SONY_KDL-55W950A.jpg&w=650&h=450', 
+     49500),
+    ('A23', 'Apple TV', 'lindo loro', 2, 3, 
+     'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/rfb-apple-tv-4k?wid=1144&hei=1144&fmt=jpeg&qlt=80&.v=1513897159574', 
+     7850);
+```
+
 ## Estructura de la Base de Datos
 
 ### Tabla: MARCAS
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| Id | int (Identity) | Clave primaria |
-| Descripcion | varchar(50) | Nombre de la marca |
+| Id | int (Identity) / INTEGER (AUTOINCREMENT) | Clave primaria |
+| Descripcion | varchar(50) / TEXT | Nombre de la marca |
 
 ### Tabla: CATEGORIAS
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| Id | int (Identity) | Clave primaria |
-| Descripcion | varchar(50) | Nombre de la categoría |
+| Id | int (Identity) / INTEGER (AUTOINCREMENT) | Clave primaria |
+| Descripcion | varchar(50) / TEXT | Nombre de la categoría |
 
 ### Tabla: ARTICULOS
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| Id | int (Identity) | Clave primaria |
-| Codigo | varchar(50) | Código del artículo |
-| Nombre | varchar(50) | Nombre del artículo |
-| Descripcion | varchar(150) | Descripción del artículo |
-| IdMarca | int | Clave foránea a MARCAS |
-| IdCategoria | int | Clave foránea a CATEGORIAS |
-| ImagenUrl | varchar(1000) | URL de la imagen |
-| Precio | money | Precio del artículo |
+| Id | int (Identity) / INTEGER (AUTOINCREMENT) | Clave primaria |
+| Codigo | varchar(50) / TEXT | Código del artículo |
+| Nombre | varchar(50) / TEXT | Nombre del artículo |
+| Descripcion | varchar(150) / TEXT | Descripción del artículo |
+| IdMarca | int / INTEGER | Clave foránea a MARCAS |
+| IdCategoria | int / INTEGER | Clave foránea a CATEGORIAS |
+| ImagenUrl | varchar(1000) / TEXT | URL de la imagen |
+| Precio | money / REAL | Precio del artículo |
+
+## Diferencias entre SQL Server y SQLite
+
+### Tipos de datos
+- SQL Server: `int IDENTITY`, `varchar(n)`, `money`
+- SQLite: `INTEGER AUTOINCREMENT`, `TEXT`, `REAL`
+
+### AUTO INCREMENT
+- SQL Server: `IDENTITY(1,1)`
+- SQLite: `AUTOINCREMENT`
+
+### Claves foráneas
+- SQL Server: No están explícitas en el script original
+- SQLite: Se agregaron con `FOREIGN KEY` para mantener integridad referencial
+
+### Sintaxis INSERT
+- SQL Server: `INSERT INTO tabla VALUES (...)`
+- SQLite: `INSERT INTO tabla (columnas) VALUES (...)` (más explícito)

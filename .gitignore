@@ -1,0 +1,27 @@
+## Ignorar carpetas de Visual Studio
+.vs/
+bin/
+obj/
+
+## Ignorar archivos de usuario
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Ignorar resultados de compilación
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+
+## Ignorar archivos de caché
+*.cache
+*.dll
+*.exe
+*.pdb
+*.log
